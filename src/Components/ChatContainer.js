@@ -10,12 +10,19 @@ import ChatGPTIcon from "../Assets/chatgpt.png";
 //components
 import Loading from "./Loading";
 
-function ChatContainer({ newChat, setNewChat, setHistory }) {
+function ChatContainer({
+  newChat,
+  setNewChat,
+  setHistory,
+  setHsitoryItemclick,
+  historyItemClick,
+}) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [previousMsgs, setPreviousMsgs] = useState([]);
   const [typedMsg, setTypedMsg] = useState("");
   const [title, setTitle] = useState("");
+  const [currentChat, setCurrentChat] = useState([]);
 
   const onEnter = (e) => {
     onSendMsgClick(e);
@@ -54,9 +61,36 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
     }
   };
 
+  const getTheChatFromHistory = () => {
+    setCurrentChat(
+      previousMsgs.filter((msg) => msg.title === historyItemClick)
+    );
+
+    setHsitoryItemclick("");
+  };
+
   useEffect(() => {
+    if (historyItemClick) {
+      getTheChatFromHistory();
+    }
+
+    console.log(previousMsgs);
     if (title && typedMsg && message) {
       setPreviousMsgs((prev) => [
+        ...prev,
+        {
+          title: title,
+          role: "user",
+          content: typedMsg,
+        },
+        {
+          title: title,
+          role: message.role,
+          content: message.content,
+        },
+      ]);
+
+      setCurrentChat((prev) => [
         ...prev,
         {
           title: title,
@@ -75,15 +109,15 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
       onNewChatClick();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, title, newChat]);
+  }, [message, title, newChat, historyItemClick]);
 
   return (
     <Container>
       <div className="chat-container">
         {title ? (
           <div className="chat">
-            {previousMsgs.length !== 0 &&
-              previousMsgs.map((msg, index) => (
+            {currentChat.length !== 0 &&
+              currentChat.map((msg, index) => (
                 <div className="chat-ind" key={index}>
                   {msg.role === "user" && msg.title === title ? (
                     <div className="chat-me">

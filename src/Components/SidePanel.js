@@ -5,7 +5,7 @@ import styled from "styled-components";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import Person2Icon from "@mui/icons-material/Person2";
 
-function SidePanel({ setNewChat, history }) {
+function SidePanel({ setNewChat, history, setHsitoryItemclick }) {
   return (
     <Container>
       <div className="top-section">
@@ -17,7 +17,11 @@ function SidePanel({ setNewChat, history }) {
         <div className="chats-panel">
           {history.length !== 0 &&
             history.map((item, index) => (
-              <div className="chat-item" key={index}>
+              <div
+                className="chat-item"
+                key={index}
+                onClick={() => setHsitoryItemclick(item)}
+              >
                 <ChatBubbleOutlineIcon className="icon" />
                 <div className="content">{item}</div>
               </div>
