@@ -12,7 +12,7 @@ import Loading from "./Loading";
 
 function ChatContainer({ newChat, setNewChat, setHistory }) {
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [previousMsgs, setPreviousMsgs] = useState([]);
   const [typedMsg, setTypedMsg] = useState("");
   const [title, setTitle] = useState("");
@@ -83,8 +83,8 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         {title ? (
           <div className="chat">
             {previousMsgs.length !== 0 &&
-              previousMsgs.map((msg) => (
-                <div className="chat-ind">
+              previousMsgs.map((msg, index) => (
+                <div className="chat-ind" key={index}>
                   {msg.role === "user" && msg.title === title ? (
                     <div className="chat-me">
                       <div className="content">{msg.content}</div>
