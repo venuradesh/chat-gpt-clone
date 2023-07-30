@@ -18,7 +18,6 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
   };
 
   const onNewChatClick = () => {
-    setHistory((prev) => [...prev, title]);
     setTypedMsg("");
     setTitle("");
     setMessage("");
@@ -33,23 +32,12 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         setHistory((prev) => [...prev, typedMsg]);
       }
 
-      setPreviousMsgs((prev) => [
-        ...prev,
-        {
-          title: title,
-          role: "user",
-          content: typedMsg,
-        },
-      ]);
-
       document.getElementById("chat-input").value = "";
       axios
         .post("http://localhost:8080/completion", {
           msg: typedMsg,
         })
         .then((res) => {
-          // setMessages([...res.data.choices]);
-          console.log(res.data.choices);
           setMessage(res.data.choices[0].message);
         })
         .catch((err) => {
@@ -66,6 +54,11 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         ...prev,
         {
           title: title,
+          role: "user",
+          content: typedMsg,
+        },
+        {
+          title: title,
           role: message.role,
           content: message.content,
         },
@@ -75,6 +68,7 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
     if (newChat) {
       onNewChatClick();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message, title, newChat]);
 
   return (
@@ -83,18 +77,24 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         {title ? (
           <div className="chat">
             {previousMsgs.length !== 0 &&
-              previousMsgs.map((msg, index) => (
-                <div className="chat-ind" key={index}>
-                  {msg.role === "user" ? (
+              previousMsgs.map((msg) => (
+                <div className="chat-ind">
+                  {msg.role === "user" && msg.title === title ? (
                     <div className="chat-me">
                       <div className="content">{msg.content}</div>
                       <Person2Icon className="user-icon" />
                     </div>
                   ) : (
-                    <div className="chat-bot">
-                      <img src={ChatGPTIcon} alt="chat-gpt-icon" />
-                      <div className="content">{msg.content}</div>
-                    </div>
+                    <React.Fragment>
+                      {msg.title === title ? (
+                        <div className="chat-bot">
+                          <img src={ChatGPTIcon} alt="chat-gpt-icon" />
+                          <div className="content">{msg.content}</div>
+                        </div>
+                      ) : (
+                        <React.Fragment></React.Fragment>
+                      )}
+                    </React.Fragment>
                   )}
                 </div>
               ))}
