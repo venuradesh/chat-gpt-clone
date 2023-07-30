@@ -5,7 +5,7 @@ const axios = require("axios");
 
 const API_PORT = process.env.PORT || 8080;
 const app = express();
-const API_KEY = "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";
+const API_KEY = "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";
 
 app.use(bodyParser.json());
 app.use(cors());

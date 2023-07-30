@@ -7,6 +7,9 @@ import SendIcon from "@mui/icons-material/Send";
 import Person2Icon from "@mui/icons-material/Person2";
 import ChatGPTIcon from "../Assets/chatgpt.png";
 
+//components
+import Loading from "./Loading";
+
 function ChatContainer({ newChat, setNewChat, setHistory }) {
   const [message, setMessage] = useState("");
   const [previousMsgs, setPreviousMsgs] = useState([]);
@@ -73,6 +76,7 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
 
   return (
     <Container>
+      <Loading />
       <div className="chat-container">
         {title ? (
           <div className="chat">
