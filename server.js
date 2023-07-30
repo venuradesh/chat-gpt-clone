@@ -2,16 +2,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const axios = require("axios");
+require("dotenv").config();
 
 const API_PORT = process.env.PORT || 8080;
 const app = express();
-const API_KEY = "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";
+const API_KEY = process.env.API_KEY;
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post("/completion", async (req, res) => {
+  console.log(process.env.API_KEY);
   try {
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -35,7 +37,7 @@ app.post("/completion", async (req, res) => {
     const data = await response.data;
     res.status(200).send(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     res.status(409).send({ message: "Error occured while fetching from API" });
   }
 });
