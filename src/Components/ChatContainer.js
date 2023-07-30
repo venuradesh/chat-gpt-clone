@@ -12,6 +12,7 @@ import Loading from "./Loading";
 
 function ChatContainer({ newChat, setNewChat, setHistory }) {
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [previousMsgs, setPreviousMsgs] = useState([]);
   const [typedMsg, setTypedMsg] = useState("");
   const [title, setTitle] = useState("");
@@ -30,6 +31,7 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
   const onSendMsgClick = (e) => {
     e.preventDefault();
     if (typedMsg) {
+      setLoading(true);
       if (!title) {
         setTitle(typedMsg);
         setHistory((prev) => [...prev, typedMsg]);
@@ -42,6 +44,7 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         })
         .then((res) => {
           setMessage(res.data.choices[0].message);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -76,7 +79,6 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
 
   return (
     <Container>
-      <Loading />
       <div className="chat-container">
         {title ? (
           <div className="chat">
@@ -112,6 +114,13 @@ function ChatContainer({ newChat, setNewChat, setHistory }) {
         )}
       </div>
       <div className="input-container">
+        {loading ? (
+          <div className="loading-container">
+            <Loading />
+          </div>
+        ) : (
+          <React.Fragment></React.Fragment>
+        )}
         <div className="input">
           <input
             type="text"
@@ -229,6 +238,16 @@ const Container = styled.div`
     height: 15vh;
     padding-inline: 10vw;
     background-image: linear-gradient(to top, var(--panel-color), transparent);
+    position: relative;
+    z-index: 0;
+
+    .loading-container {
+      position: absolute;
+      top: -40px;
+      z-index: 100;
+      right: 50%;
+      transform: translateX(50%);
+    }
 
     .input {
       width: 100%;

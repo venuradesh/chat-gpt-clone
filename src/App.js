@@ -6,7 +6,6 @@ import SidePanel from "./Components/SidePanel";
 function App() {
   const [newChat, setNewChat] = useState(false);
   const [history, setHistory] = useState([]);
-  const [newChatFunc, setNewchatFunc] = useState(false);
 
   return (
     <Container>

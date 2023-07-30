@@ -17,10 +17,13 @@ function Loading() {
 export default Loading;
 
 const Container = styled.div`
-  background-color: var(--logo-color);
+  background-color: var(--panel-color);
   width: max-content;
   height: max-content;
   padding-inline: 10px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
 
   .dot {
     width: 10px;
